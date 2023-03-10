@@ -1,0 +1,123 @@
+<html lang="en">
+  <head>
+    <title>Tennis Rotations</title>
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/rotations.css}">
+
+    <script src="https://kit.fontawesome.com/495524d888.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3.2.47/dist/vue.global.prod.js" type="text/javascript"></script>
+  </head>
+  
+  <body>
+    <div id="v-rotations-app">
+      <div class="main">
+        <div class="block">
+          <div class="section">
+            <label class="label" for="num-courts">Number of courts:</label>
+            <input class="input" v-model="numCourts" placeholder="Number of courts" id="num-courts" type="text"/>
+          </div>
+          <div class="section">
+            <label class="label" for="num-rotations">Number of rotations:</label>
+            <input class="input" v-model="numRotations" placeholder="Number of rotations" id="num-rotations" type="text"/>
+          </div>
+          <div class="section">
+            <label class="label" for="rotation-duration">Duration of each rotation:</label>
+            <input class="input" v-model="rotationDuration" placeholder="Rotation duration" id="rotation-duration" type="text"/>
+            mins
+          </div>
+          <div class="section">
+            <label class="label" for="start-time">Start time:</label>
+            <input class="input" v-model="startTime" placeholder="Start time" id="start-time" type="text"/>
+          </div>
+          <button v-if="hasPlayers" class="section button players" @click="generateRotations()" id="generate-rotations-button">
+            Generate rotations
+          </button>
+          <button v-if="hasPlayers" class="section button players" @click="resetPlayers()" id="reset-rotations-button">
+            Reset players
+          </button>
+        </div>
+        <div class="block">
+          <add-player class="section" @add-player="addPlayer"></add-player>
+          <players @remove-player="removePlayer" v-bind:players="players"></players>
+          <div v-if="hasPlayers" class="section players">Total: {{ players.length }}</div>
+        </div>
+      </div>
+      <div class="section" v-if="hasRotations">
+        <table class="rotations" v-bind:style="{ width: numCourts*200 + 400 + 'px'}">
+          <thead>
+          <tr>
+            <th>
+              Time
+            </th>
+            <th v-for="i in numCourts">Court {{ i }}</th>
+            <th>Sitting out</th>
+          </tr>
+          </thead>
+          <tbody is="vue:rotations"
+                 v-bind:rotations="rotations"
+                 v-bind:start-time="startTime"
+                 v-bind:rotation-duration="rotationDuration"
+          ></tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+
+  <script type="text/x-template" id="v-add-player-template">
+    <div class="section">
+      <div class="players-header">Players</div>
+      <input
+          class="input"
+          v-model="playerName"
+          placeholder="Enter player name"
+          id="player-name"
+          type="text"
+          @keypress="addPlayer($event)"
+      />
+      <a v-if="hasEnteredPlayerName" @click="addPlayer($event)" class="icon" title="Add player" href="#">
+        <i class="fa-solid fa-plus"></i>
+      </a>
+    </div>
+  </script>
+
+  <script type="text/x-template" id="v-players-template">
+    <div class="section players">
+      <template v-for="player in players">
+        <player @remove-player="removePlayer" v-bind:player="player"></player>
+      </template>
+    </div>
+  </script>
+
+  <script type="text/x-template" id="v-player-template">
+    <div class="player">
+      <a @click="$parent.$emit('removePlayer', player)" class="icon" title="Remove player" href="#">
+        <i class="fa-solid fa-trash"></i>
+      </a>
+      {{ player }}
+    </div>
+  </script>
+
+  <script type="text/x-template" id="v-rotations-template">
+    <tbody>
+    <tr v-for="rotation in rotations">
+      <td>
+          <div>{{ rotation.times.startTime }}</div>
+          <div>{{ rotation.times.endTime }}</div>
+      </td>
+      <td v-for="match in rotation.matches" >
+        <div>
+          <div>{{ match.pair1.player1 }} & {{ match.pair1.player2 }}</div>
+          <div>vs.</div>
+          <div>{{ match.pair2.player1 }} & {{ match.pair2.player2 }}</div>
+        </div>
+      </td>
+      <td>
+        {{ rotation.sittingOut.join(", ") }}
+      </td>
+    </tr>
+    </tbody>
+  </script>
+
+  <script type="text/javascript" th:src="@{/js/rotations.js}"></script>
+</html>

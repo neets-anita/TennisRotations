@@ -1,0 +1,80 @@
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  padding: 24px;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.players {
+  margin-left: 45px;
+}
+
+.label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  width: 205px;
+  display: inline-block;
+}
+
+.button {
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.input {
+  padding: 5px;
+}
+
+.icon {
+  color: blueviolet;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.player {
+  margin-bottom: 5px;
+}
+
+.players-header {
+  margin-left: 45px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.block {
+  display: inline-block;
+  padding: 1rem 1rem;
+  vertical-align: top;
+  margin-left: 200px;
+}
+
+table.rotations {
+  font-family: Arial, Helvetica, sans-serif;
+  height: 200px;
+  text-align: center;
+  border-collapse: collapse;
+}
+table.rotations td, table.rotations th {
+  border: 1px solid #000000;
+  padding: 3px 2px;
+}
+table.rotations tr:nth-child(even) {
+  background: #D0E4F5;
+}
+table.rotations thead {
+  background: #0B6FA4;
+}
+table.rotations thead th {
+  font-size: 17px;
+  font-weight: bold;
+  color: #FFFFFF;
+  text-align: center;
+  border-left: 2px solid #FFFFFF;
+  text-transform: uppercase;
+}
+table.rotations thead th:first-child {
+  border-left: none;
+}
