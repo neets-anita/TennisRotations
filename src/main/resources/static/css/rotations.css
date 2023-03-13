@@ -96,4 +96,7 @@ table.rotations thead th:first-child {
     display: block;
     padding-right: 230px;
   }
+  body {
+    -webkit-print-color-adjust: exact;
+  }
 }
