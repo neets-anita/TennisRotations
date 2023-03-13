@@ -12,7 +12,7 @@
   <body>
     <div id="v-rotations-app">
       <div class="main">
-        <div class="block">
+        <div class="block no-printme">
           <div class="section">
             <label class="label" for="num-courts">Number of courts:</label>
             <input class="input" v-model="numCourts" placeholder="Number of courts" id="num-courts" type="text"/>
@@ -31,12 +31,11 @@
             <input class="input" v-model="startTime" placeholder="Start time" id="start-time" type="text"/>
           </div>
         </div>
-        <div class="block">
+        <div class="block no-printme">
           <add-player class="section" @add-player="addPlayer"></add-player>
           <players @remove-player="removePlayer" v-bind:players="players"></players>
-          <div v-if="hasPlayers" class="section players">Total: {{ players.length }}</div>
         </div>
-        <div class="block">
+        <div class="block no-printme">
           <div>
             <button v-if="hasEnoughPlayers" class="section button players" @click="generateRotations()" id="generate-rotations-button">
               Regenerate rotations
@@ -47,9 +46,17 @@
               Reset players
             </button>
           </div>
+          <div>
+            <button v-if="hasEnoughPlayers" class="section button players" @click="print()" id="print-button">
+              Print
+            </button>
+          </div>
         </div>
       </div>
-      <div class="center-screen" v-if="hasRotations">
+      <div class="center-screen" v-if="hasRotations" id="rotations">
+        <div class="printme">
+          <players @remove-player="removePlayer" v-bind:players="players"></players>
+        </div>
         <table class="rotations" v-bind:style="{ width: adjustedNumCourts*200 + 400 + 'px'}">
           <thead>
           <tr>
@@ -98,11 +105,12 @@
         <player @remove-player="removePlayer" v-bind:player="player"></player>
       </template>
     </div>
+    <div class="section players">Total: {{ players.length }}</div>
   </script>
 
   <script type="text/x-template" id="v-player-template">
     <div class="player">
-      <a @click="$parent.$emit('removePlayer', player)" class="icon" title="Remove player" href="#">
+      <a @click="$parent.$emit('removePlayer', player)" class="icon no-printme" title="Remove player" href="#">
         <i class="fa-solid fa-trash"></i>
       </a>
       {{ player }}

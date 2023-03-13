@@ -84,3 +84,16 @@ table.rotations thead th {
 table.rotations thead th:first-child {
   border-left: none;
 }
+
+.printme {
+  display: none;
+}
+@media print {
+  .no-printme  {
+    display: none;
+  }
+  .printme  {
+    display: block;
+    padding-right: 230px;
+  }
+}

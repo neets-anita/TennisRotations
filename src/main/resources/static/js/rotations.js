@@ -54,6 +54,9 @@ const RotationsApp = {
     resetPlayers() {
       this.players = []
     },
+    print() {
+      window.print()
+    },
   }
 };
 
