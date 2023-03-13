@@ -18,11 +18,11 @@
             <input class="input" v-model="numCourts" placeholder="Number of courts" id="num-courts" type="text"/>
           </div>
           <div class="section">
-            <label class="label" for="num-rotations">Number of rotations:</label>
+            <label class="label" for="num-rotations">Number of rounds:</label>
             <input class="input" v-model="numRotations" placeholder="Number of rotations" id="num-rotations" type="text"/>
           </div>
           <div class="section">
-            <label class="label" for="rotation-duration">Duration of each rotation:</label>
+            <label class="label" for="rotation-duration">Duration of each round:</label>
             <input class="input" v-model="rotationDuration" placeholder="Rotation duration" id="rotation-duration" type="text"/>
             mins
           </div>
@@ -30,27 +30,33 @@
             <label class="label" for="start-time">Start time:</label>
             <input class="input" v-model="startTime" placeholder="Start time" id="start-time" type="text"/>
           </div>
-          <button v-if="hasPlayers" class="section button players" @click="generateRotations()" id="generate-rotations-button">
-            Generate rotations
-          </button>
-          <button v-if="hasPlayers" class="section button players" @click="resetPlayers()" id="reset-rotations-button">
-            Reset players
-          </button>
         </div>
         <div class="block">
           <add-player class="section" @add-player="addPlayer"></add-player>
           <players @remove-player="removePlayer" v-bind:players="players"></players>
           <div v-if="hasPlayers" class="section players">Total: {{ players.length }}</div>
         </div>
+        <div class="block">
+          <div>
+            <button v-if="hasEnoughPlayers" class="section button players" @click="generateRotations()" id="generate-rotations-button">
+              Regenerate rotations
+            </button>
+          </div>
+          <div>
+            <button v-if="hasPlayers" class="section button players" @click="resetPlayers()" id="reset-rotations-button">
+              Reset players
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="section" v-if="hasRotations">
-        <table class="rotations" v-bind:style="{ width: numCourts*200 + 400 + 'px'}">
+      <div class="center-screen" v-if="hasRotations">
+        <table class="rotations" v-bind:style="{ width: adjustedNumCourts*200 + 400 + 'px'}">
           <thead>
           <tr>
             <th>
               Time
             </th>
-            <th v-for="i in numCourts">Court {{ i }}</th>
+            <th v-for="i in adjustedNumCourts">Court {{ i }}</th>
             <th>Sitting out</th>
           </tr>
           </thead>
@@ -75,7 +81,12 @@
           type="text"
           @keypress="addPlayer($event)"
       />
-      <a v-if="hasEnteredPlayerName" @click="addPlayer($event)" class="icon" title="Add player" href="#">
+      <a
+          @click="addPlayer($event)"
+          class="icon"
+          v-bind:style="[hasEnteredPlayerName ? {} : {'color': 'lightgrey'}]"
+          title="Add player" href="#"
+      >
         <i class="fa-solid fa-plus"></i>
       </a>
     </div>
