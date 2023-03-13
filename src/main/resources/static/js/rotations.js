@@ -12,10 +12,28 @@ const RotationsApp = {
   },
   computed: {
     hasPlayers() {
-      return this.players.length > 3
+      return this.players.length > 0
+    },
+    hasEnoughPlayers() {
+      return this.players.length > 6
     },
     hasRotations() {
       return this.rotations.length > 0
+    },
+    adjustedNumCourts() {
+      return Math.min(this.numCourts, Math.floor(this.players.length/4))
+    }
+  },
+  watch: {
+    players: {
+      deep: true,
+      handler() {
+        if (this.players.length >= 6) {
+          this.generateRotations()
+        } else {
+          this.rotations = []
+        }
+      }
     }
   },
   methods: {
@@ -28,19 +46,18 @@ const RotationsApp = {
       this.players.splice(this.players.indexOf(player), 1)
     },
     generateRotations() {
-      this.numCourts = adjustNumCourts(this.numCourts, this.players.length)
-      requestRotations(this.players, this.numCourts, this.numRotations)
+      requestRotations(this.players, this.adjustedNumCourts, this.numRotations)
       .then(result => {
         this.rotations = result.rotations
       });
     },
     resetPlayers() {
       this.players = []
-    }
+    },
   }
 };
 
-const app = Vue.createApp(RotationsApp, {numCourts: 2});
+const app = Vue.createApp(RotationsApp);
 
 app.component('add-player', {
   template: '#v-add-player-template',
@@ -142,8 +159,4 @@ function generateRotationTimes(rotations, startTime, rotationDuration) {
 
 function getTimeFromDate(date) {
   return date.getHours() + ":" + (date.getMinutes() === 0 ? "00" : date.getMinutes())
-}
-
-function adjustNumCourts(numCourts, numPlayers) {
-  return Math.min(numCourts, Math.floor(numPlayers/4))
 }
